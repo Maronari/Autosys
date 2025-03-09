@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OPC UA Клиенты</title>
+    <script src="JS/opcua-utils.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
+    <link th:href="@{/css/index.css}" rel="stylesheet" />
+</head>
+
+<body>
+    <h1>AutoSys</h1>
+    <!-- <input type="text" id="endpoint" placeholder="opc.tcp://server:port"> -->
+    <!-- <button onclick="connectClient()">Подключиться</button> -->
+
+    <div class="container">
+        <h2>Список клиентов:</h2>
+        <ul id="clientList"></ul>
+    </div>
+
+    <div class="container">
+        <div class="charts-container">
+            <div class="chart-wrapper">
+                <canvas id="RandomDoubleChart"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="RandomFloatChart"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="chart3"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.onload = loadClients;
+    </script>
+
+    <script src="JS/chart.js"></script>
+</body>
+
+</html>

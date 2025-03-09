@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 1800px; /* Максимальная ширина контейнера */
+}
+.charts-container {
+    display: flex;
+    justify-content: space-between; /* Равномерное распределение графиков */
+    gap: 20px; /* Расстояние между графиками */
+}
+.chart-wrapper {
+    flex: 1; /* Каждый график занимает равное пространство */
+    min-width: 300px; /* Минимальная ширина графика */
+    max-width: 400px; /* Максимальная ширина графика */
+}
+canvas {
+    width: 100% !important; /* Ширина графика на 100% контейнера */
+    height: 250px !important; /* Фиксированная высота графика */
+}

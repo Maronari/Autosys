@@ -1,0 +1,18 @@
+spring:
+    application:
+      name: autosys
+    server:
+      port: 8080
+    web:
+      resources:
+        static-locations: classpath:/static/
+    thymeleaf:
+      prefix: classpath:/templates/
+      suffix: .html
+    servlet:
+      path: /
+    influx:
+      url: http://localhost:8086
+      token: ${INFLUXDB_TOKEN}
+      org: mirea
+      bucket: my-bucket

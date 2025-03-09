@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  influxdb:
+    image: influxdb:latest
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb_data:/influxdb/data
+    environment:
+      INFLUXDB_INIT_PASWORD: 5643
+      INFLUXDB_ADMIN_TOKEN: 5643
+      INFLUXDB_INIT_SCRIPT: |
+        CREATE DATABASE autosys;
+        USE autosys;
+        CREATE TABLE node_data (
+          id BIGINT AUTO_INCREMENT PRIMARY KEY,
+          nodeId VARCHAR(255),
+          value DOUBLE,
+          timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+volumes:
+  influxdb_data:

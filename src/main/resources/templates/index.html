@@ -33,7 +33,10 @@
                 <canvas id="RandomFloatChart"></canvas>
             </div>
             <div class="chart-wrapper">
-                <canvas id="chart3"></canvas>
+                <canvas id="Temperature Sensor 1"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="Temperature Sensor 2"></canvas>
             </div>
         </div>
     </div>
@@ -42,7 +45,7 @@
         window.onload = loadClients;
     </script>
 
-    <script src="JS/chart.js"></script>
+    <script th:src="@{/JS/chart.js}"></script>
 </body>
 
 </html>

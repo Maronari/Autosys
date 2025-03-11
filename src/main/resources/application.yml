@@ -9,6 +9,12 @@ spring:
     thymeleaf:
       prefix: classpath:/templates/
       suffix: .html
+      prefixes:
+        css: classpath:/static/CSS/
+        js: classpath:/static/JS/
+      suffixes:
+        css: .css
+        js: .js
     servlet:
       path: /
     influx:

@@ -19,5 +19,17 @@ services:
           value DOUBLE,
           timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+  opcua-server-1:
+    build: ./server-emu
+    container_name: opcua-server-1
+    ports:
+      - "4841:4840"
+    restart: unless-stopped
+  opcua-server-2:
+    build: ./server-emu
+    container_name: opcua-server-2
+    ports:
+      - "4842:4840"
+    restart: unless-stopped
 volumes:
   influxdb_data:

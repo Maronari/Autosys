@@ -3,13 +3,15 @@ document.addEventListener('DOMContentLoaded', function () {
     const nodeIdToChartId = {
         'ns=2;s=Dynamic/RandomDouble': 'chart1',
         'ns=2;s=Dynamic/RandomFloat': 'chart2',
-        'chart3': 'chart3'
+        'ns=2;i=6': 'chart3',
+        'ns=2;i=6': 'chart4',
     };
 
     const charts = {
-        chart1: createChart('RandomDoubleChart', 'ns=2;s=Dynamic/RandomDouble'),
-        chart2: createChart('RandomFloatChart', 'ns=2;s=Dynamic/RandomFloat'),
-        chart3: createChart('chart3', 'Node 3')
+        chart1: createChart('RandomDoubleChart', 'Давление в баке 1'),
+        chart2: createChart('RandomFloatChart', 'Давление в баке 2'),
+        chart3: createChart('Temperature Sensor 1', 'Температура в баке 1'),
+        chart4: createChart('Temperature Sensor 2', 'Температура в баке 2'),
     };
 
     // Подключение к WebSocket

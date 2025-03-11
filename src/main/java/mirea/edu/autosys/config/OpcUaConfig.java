@@ -28,21 +28,29 @@ public class OpcUaConfig {
 
     private static String[] endpointUrls = {
             "opc.tcp://milo.digitalpetri.com:62541/milo",
+            "opc.tcp://localhost:4841/freeopcua/server",
+            "opc.tcp://localhost:4842/freeopcua/server",
             //"opc.tcp://192.168.0.184:4840/"
     };
 
     public static Map<String, List<String>> subscribeNodes = new HashMap<>();
     {
-        // subscribeNodes.put(endpointUrls[1],
+        subscribeNodes.put(endpointUrls[0],
+                Arrays.asList(
+                        "ns=2;s=Dynamic/RandomFloat",
+                        "ns=2;s=Dynamic/RandomDouble"));
+        subscribeNodes.put(endpointUrls[1],
+                        Arrays.asList(
+                                "ns=2;i=6"));
+            subscribeNodes.put(endpointUrls[2],
+                                Arrays.asList(
+                                        "ns=2;i=6"));
+        // subscribeNodes.put(endpointUrls[3],
         //         Arrays.asList(
         //                 "ns=1;s=InternalTemp"));
         //                 // "ns=1;s=FreeHeapSize",
         //                 // "ns=1;s=MinimumEverFreeHeapSize",
         //                 // "ns=1;s=HeapStats"));
-        subscribeNodes.put(endpointUrls[0],
-                Arrays.asList(
-                        "ns=2;s=Dynamic/RandomFloat",
-                        "ns=2;s=Dynamic/RandomDouble"));
     }
 
     @Bean

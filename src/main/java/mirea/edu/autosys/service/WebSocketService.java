@@ -45,10 +45,11 @@ public class WebSocketService extends TextWebSocketHandler {
      * @param nodeId Идентификатор узла OPC UA.
      * @param value  Значение узла.
      */
-    public void sendMessage(NodeId nodeId, String value) {
+    public void sendMessage(String endpointUrl, NodeId nodeId, String value) {
         Map<String, Object> jsonMessage = new HashMap<>();
-        jsonMessage.put("nodeId", nodeId.toParseableString()); // Преобразуем NodeId в строку
-        jsonMessage.put("value", value); // Значение узла
+        jsonMessage.put("endpointUrl", endpointUrl);
+        jsonMessage.put("nodeId", nodeId.toParseableString());
+        jsonMessage.put("value", value);
 
         String jsonString;
         try {

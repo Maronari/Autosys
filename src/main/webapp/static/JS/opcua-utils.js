@@ -25,7 +25,6 @@ async function loadClients() {
     fetch('/api/opcua/clients')
         .then(response => response.json())
         .then(data => {
-            // Фильтруем только уникальные подключенные клиенты
             const uniqueConnectedClients = [...new Set([...data])];
 
             uniqueConnectedClients.forEach(url => {
@@ -70,8 +69,6 @@ function LoadNodes() {
         })
         .then(nodes => {
             console.log('Узлы:', nodes);
-            // Update DOM to display nodes information
-            // For example:
             const nodeList = document.getElementById('nodeList');
             nodeList.innerHTML = '';
             nodes.forEach(node => {
@@ -81,7 +78,7 @@ function LoadNodes() {
             });
         })
         .catch(error => {
-            console.error('Ошибка:', error);
+            console.error('Error:', error);
             alert('Не удалось загрузить информацию о узлах. Попробуйте еще раз.');
         });
 }
@@ -90,10 +87,9 @@ function subscribeToNode(endpointUrl, nodeId) {
     fetch(`/api/opcua/subscribe?endpointUrl=${endpointUrl}&nodeId=${nodeId}`)
         .then(response => response.text())
         .then(result => {
-            console.log(`Подписка на узел ${nodeId} завершена. Результат: ${result}`);
-            // Здесь можно добавить дополнительную логику, например, показать сообщение пользователю
+            console.log(`Subscribe ${nodeId}: ${result}`);
         })
         .catch(error => {
-            console.error(`Ошибка при подписке на узел ${nodeId}:`, error);
+            console.error(`Error subscribing ${nodeId}:`, error);
         });
 }

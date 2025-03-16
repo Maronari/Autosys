@@ -27,6 +27,7 @@ import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mirea.edu.autosys.model.Temperature;
 import mirea.edu.autosys.utils.NodeInfo;
 
 @Service
@@ -36,7 +37,7 @@ public class OpcUaService {
     @Autowired
     private WebSocketService webSocketService;
     @Autowired
-    private InfluxDBService influxDBService;
+    private DatabaseService databaseService;
 
     private String applicationName = "AutoSys OPC UA Client";
     private String applicationUri = "urn:mirea:opcua:autosys";
@@ -141,8 +142,8 @@ public class OpcUaService {
                 Variant variant = dataValue.getValue();
                 Object value = variant.getValue();
 
-                webSocketService.sendMessage(nodeId, value.toString());
-                // influxDBService.writeTemperature((Double) value, nodeId.toParseableString());
+                webSocketService.sendMessage(endpointUrl, nodeId, value.toString());
+                databaseService.saveTemperature(new Temperature(endpointUrl, nodeId.toParseableString(), (Double) value));
             }));
 
         } catch (Exception e) {

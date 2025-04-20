@@ -17,14 +17,23 @@ spring:
         js: .js
     servlet:
       path: /
+      session:
+        cookie:
+          same-site: None
+          secure: true
+      multipart:
+        enabled: true
     datasource:
       url: jdbc:postgresql://localhost:5432/autosys
       username: autosys
       password: 5432
     jpa:
       hibernate:
-        ddl-auto: update
-      show-sql: false
+        ddl-auto: none
+        naming:
+          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      show-sql: true
       properties:
         hibernate:
           dialect: org.hibernate.dialect.PostgreSQLDialect
+    

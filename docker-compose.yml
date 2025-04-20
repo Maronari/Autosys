@@ -9,15 +9,226 @@ services:
       POSTGRES_DB: autosys
     ports:
       - "5432:5432"
-  opcua-server-1:
-    build: ./server-emu
-    container_name: opcua-server-1
-    ports:
-      - "4841:4840"
     restart: unless-stopped
-  opcua-server-2:
+# Rapid Fermentation Tanks
+  opcua-server-01:
     build: ./server-emu
-    container_name: opcua-server-2
+    container_name: T1
     ports:
-      - "4842:4840"
+      - "4801:4840"
+    environment:
+      - NODE_NAME=Temperature_Sensor
+      - NODE_VALUE=20.0
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-02:
+    build: ./server-emu
+    container_name: P1
+    ports:
+      - "4802:4840"
+    environment:
+      - NODE_NAME=Pressure_Sensor
+      - NODE_VALUE=100
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-03:
+    build: ./server-emu
+    container_name: LH1
+    ports:
+      - "4803:4840"
+    environment:
+      - NODE_NAME=High_Level_Sensor
+      - NODE_VALUE=1
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-04:
+    build: ./server-emu
+    container_name: LL1
+    ports:
+      - "4804:4840"
+    environment:
+      - NODE_NAME=Low_Level_Sensor
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-05:
+    build: ./server-emu
+    container_name: V1
+    ports:
+      - "4805:4840"
+    environment:
+      - NODE_NAME=Inlet_Valve
+      - NODE_VALUE=0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-06:
+    build: ./server-emu
+    container_name: V2
+    ports:
+      - "4806:4840"
+    environment:
+      - NODE_NAME=Inlet_Heat_Exchange_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-07:
+    build: ./server-emu
+    container_name: V3
+    ports:
+      - "4807:4840"
+    environment:
+      - NODE_NAME=Exhaust_Heat_Inchange_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-08:
+    build: ./server-emu
+    container_name: V4
+    ports:
+      - "4808:4840"
+    environment:
+      - NODE_NAME=Carbon_Dioxide_Release_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-09:
+    build: ./server-emu
+    container_name: V5
+    ports:
+      - "4809:4840"
+    environment:
+      - NODE_NAME=Exhaust_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-010:
+    build: ./server-emu
+    container_name: PL1
+    ports:
+      - "48010:4840"
+    environment:
+      - NODE_NAME=Heat_Exchanger_Pump_Frequency
+      - NODE_VALUE=50.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-011:
+    build: ./server-emu
+    container_name: PL2
+    ports:
+      - "48011:4840"
+    environment:
+      - NODE_NAME=Vine_Pump_Frequency
+      - NODE_VALUE=50.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+# Quiet Fermentation Tanks
+  opcua-server-11:
+    build: ./server-emu
+    container_name: T2
+    ports:
+      - "4811:4840"
+    environment:
+      - NODE_NAME=Temperature_Sensor
+      - NODE_VALUE=20.0
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-12:
+    build: ./server-emu
+    container_name: P2
+    ports:
+      - "4812:4840"
+    environment:
+      - NODE_NAME=Pressure_Sensor
+      - NODE_VALUE=100
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-13:
+    build: ./server-emu
+    container_name: LH2
+    ports:
+      - "4813:4840"
+    environment:
+      - NODE_NAME=High_Level_Sensor
+      - NODE_VALUE=1
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-14:
+    build: ./server-emu
+    container_name: LL2
+    ports:
+      - "4814:4840"
+    environment:
+      - NODE_NAME=Low_Level_Sensor
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=True
+    restart: unless-stopped
+  opcua-server-15:
+    build: ./server-emu
+    container_name: V6
+    ports:
+      - "4815:4840"
+    environment:
+      - NODE_NAME=Inlet_Valve
+      - NODE_VALUE=0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-16:
+    build: ./server-emu
+    container_name: V7
+    ports:
+      - "4816:4840"
+    environment:
+      - NODE_NAME=Inlet_Heat_Exchange_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-17:
+    build: ./server-emu
+    container_name: V8
+    ports:
+      - "4817:4840"
+    environment:
+      - NODE_NAME=Exhaust_Heat_Inchange_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-18:
+    build: ./server-emu
+    container_name: V9
+    ports:
+      - "4818:4840"
+    environment:
+      - NODE_NAME=Carbon_Dioxide_Release_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-19:
+    build: ./server-emu
+    container_name: V10
+    ports:
+      - "4819:4840"
+    environment:
+      - NODE_NAME=Exhaust_Valve
+      - NODE_VALUE=0.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-110:
+    build: ./server-emu
+    container_name: PL3
+    ports:
+      - "48110:4840"
+    environment:
+      - NODE_NAME=Heat_Exchanger_Pump_Frequency
+      - NODE_VALUE=50.0
+      - IS_READ_ONLY=False
+    restart: unless-stopped
+  opcua-server-111:
+    build: ./server-emu
+    container_name: PL4
+    ports:
+      - "48111:4840"
+    environment:
+      - NODE_NAME=Vine_Pump_Frequency
+      - NODE_VALUE=50.0
+      - IS_READ_ONLY=False
     restart: unless-stopped

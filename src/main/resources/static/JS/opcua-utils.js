@@ -12,6 +12,20 @@ async function disconnectClient(endpointUrl) {
     //loadClients();
 }
 
+async function readNode(endpointUrl, nodeId) {
+    let response = await fetch(`/api/opcua/read?endpointUrl=${encodeURIComponent(endpointUrl)}&nodeId=${encodeURIComponent(nodeId)}`, { method: "GET" });
+    if (!response.ok) {
+        const errorBody = await response.text();
+        return errorBody;
+    }
+    const data = await response.json();
+    return data;
+}
+
+async function writeToNode(endpointUrl, nodeId) {
+    let response = await fetch(`/api/opcua/write?endpointUrl=${encodeURIComponent(endpointUrl)}&nodeId=${encodeURIComponent(nodeId)}`, { method: "POST" });
+}
+
 function updateButtonStyle(url) {
     const button = document.querySelector(`button[onclick="disconnectClient('${url}')"]`);
     button.style.color = 'red';

@@ -20,11 +20,11 @@ public class WebController {
 
     @GetMapping("/")
     public String index() {
-        for (String endpointUrl: OpcUaConfig.subscribeNodes.keySet())
-        {
-            String url = opcUaBaseUrl + "/subscribe?endpointUrl=" + endpointUrl;
-            restTemplate.postForEntity(url, null, String.class);
-        }
+        // for (String endpointUrl: OpcUaConfig.subscribeNodes.keySet())
+        // {
+        //     String url = opcUaBaseUrl + "/subscribe?endpointUrl=" + endpointUrl;
+        //     restTemplate.postForEntity(url, null, String.class);
+        // }
         return "index"; // Возвращает index.html из папки static
     }
 }

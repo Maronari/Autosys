@@ -5,10 +5,15 @@ from datetime import datetime
 import time
 import random
 
+import os
+from dotenv import load_dotenv
+
 from asyncua import ua, uamethod, Server
 
 
 _logger = logging.getLogger(__name__)
+
+load_dotenv()
 
 
 class SubHandler:
@@ -51,9 +56,16 @@ async def main():
 
     # populating our address space
 
-    # Add Temperature node
-    temperature_node = await server.nodes.objects.add_variable(idx, "Temperature", 30.0)
-    await temperature_node.set_writable()
+    # Add Node
+    node_name = os.getenv('NODE_NAME')
+    node_value = float(os.getenv('NODE_VALUE'))
+    is_read_only = bool(os.getenv('IS_READ_ONLY'))
+
+    main_node = await server.nodes.objects.add_variable(idx, node_name, node_value)
+    if is_read_only:
+        await main_node.set_read_only()
+    else:
+        await main_node.set_writable()
 
     # import some nodes from xml
     # await server.import_xml("custom_nodes.xml")
@@ -66,13 +78,11 @@ async def main():
     async with server:
         print("Available loggers are: ", logging.Logger.manager.loggerDict.keys())
         # trigger event, all subscribed clients will receive it
-        await temperature_node.write_value(26.0)
-        await myevgen.trigger(message="This is BaseEvent")
-
-        while True:
-            await asyncio.sleep(0.1)
-            random_temp = random.uniform(30, 37)
-            await temperature_node.write_value(random_temp)
+        if is_read_only:
+            while True:
+                await asyncio.sleep(0.1)
+                random_value = random.uniform(node_value*0.95, node_value*1.05)
+                await main_node.write_value(random_value)
 
 
 if __name__ == "__main__":

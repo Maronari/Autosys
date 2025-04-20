@@ -83,7 +83,14 @@
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-json</artifactId>
+		</dependency>
 
 		<!-- Other -->
 		<dependency>
@@ -159,13 +166,13 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/webapp</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

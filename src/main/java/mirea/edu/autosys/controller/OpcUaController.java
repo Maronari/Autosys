@@ -76,17 +76,6 @@ public class OpcUaController {
         }
     }
 
-    @GetMapping("/random-int32")
-    public ResponseEntity<?> getRandomInt32(@RequestParam String endpointUrl) {
-        try {
-            int value = (Integer) opcUaService.readValue(endpointUrl, "Dynamic/RandomInt32");
-            return ResponseEntity.ok(value);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error reading RandomInt32: " + e.getMessage());
-        }
-    }
-
     @PostMapping("/subscribe")
     public ResponseEntity<String> subscribeToNodes(@RequestParam String endpointUrl) {
         List<String> nodes = OpcUaConfig.getNodesForEndpoint(endpointUrl);

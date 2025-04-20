@@ -1,17 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
     const nodeIdToChartId = {
-        'opc.tcp://milo.digitalpetri.com:62541/milo-ns=2:s=Dynamic/RandomDouble': 'chart1',
-        'opc.tcp://localhost:4841/freeopcua/server:ns=2;i=6': 'chart2',
-        'opc.tcp://localhost:4842/freeopcua/server:ns=2;i=6': 'chart3',
+        'opc.tcp://localhost:4801/freeopcua/server:ns=2;i=6': 'chart1',
+        'opc.tcp://localhost:4802/freeopcua/server:ns=2;i=6': 'chart2',
+        'opc.tcp://localhost:4811/freeopcua/server:ns=2;i=6': 'chart3',
+        'opc.tcp://localhost:4812/freeopcua/server:ns=2;i=6': 'chart4',
     };
 
     const charts = {
-        chart1: createChart('RandomDoubleChart', 'Давление в баке 1'),
-        chart2: createChart('Temperature Sensor 1', 'Температура в баке 1'),
-        chart3: createChart('Temperature Sensor 2', 'Температура в баке 2'),
+        chart1: createChart('Temperature_Sensor_1', 'Температура в баке TF1'),
+        chart2: createChart('Pressure_Sensor_1', 'Давление в баке TF1'),
+        chart3: createChart('Temperature_Sensor_2', 'Температура в баке TF2'),
+        chart4: createChart('Pressure_Sensor_2', 'Давление в баке TF2'),
     };
 
-    const socket = new WebSocket('ws://localhost:8080/ws');
+    const socket = new WebSocket('http://localhost:8080/ws');
 
     socket.onmessage = function (event) {
         const data = JSON.parse(event.data);
@@ -19,12 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const nodeId = data.nodeId;
         const value = data.value;
 
-        //console.log(`Received data: nodeId=${nodeId}, value=${value}`);
-
-        const uniqueIdentifier = `${endpointUrl}:${nodeId}`;
-
-        const chartId = nodeIdToChartId[nodeId];
-        if (uniqueIdentifier in nodeIdToChartId) {
+        const uniqueIdentifier = `${endpointdURL}:${nodeId}`;
+        
+        const chartId = nodeIdToChartId[uniqueIdentifier];
+        if (chartId in charts) {
             const chart = charts[chartId];
             const timestamp = Date.now();
             chart.data.datasets[0].data.push({

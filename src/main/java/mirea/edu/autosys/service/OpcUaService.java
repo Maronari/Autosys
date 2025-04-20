@@ -1,5 +1,8 @@
 package mirea.edu.autosys.service;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,9 +28,10 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
 import org.eclipse.milo.opcua.stack.core.types.builtin.unsigned.UInteger;
 import org.eclipse.milo.opcua.stack.core.types.enumerated.TimestampsToReturn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import mirea.edu.autosys.model.Temperature;
+import mirea.edu.autosys.model.NodeTrend;
 import mirea.edu.autosys.utils.NodeInfo;
 
 @Service
@@ -38,6 +42,9 @@ public class OpcUaService {
     private WebSocketService webSocketService;
     @Autowired
     private DatabaseService databaseService;
+    @Autowired
+    @Lazy
+    private PasterizationService pasterizationService;
 
     private String applicationName = "AutoSys OPC UA Client";
     private String applicationUri = "urn:mirea:opcua:autosys";
@@ -92,7 +99,7 @@ public class OpcUaService {
                 throw new RuntimeException("OPC UA Client for " + endpointUrl + " not found.");
             }
 
-            NodeId node = new NodeId(2, nodeId);
+            NodeId node = NodeId.parse(nodeId);
             DataValue dataValue = client.readValue(0, TimestampsToReturn.Both, node).get();
             Variant variant = dataValue.getValue();
 
@@ -109,7 +116,7 @@ public class OpcUaService {
                 throw new RuntimeException("OPC UA Client for " + endpointUrl + " not found.");
             }
 
-            NodeId node = new NodeId(2, nodeId);
+            NodeId node = NodeId.parse(nodeId);
             Variant v = new Variant(value);
             DataValue dv = new DataValue(v, StatusCode.GOOD);
 
@@ -138,13 +145,27 @@ public class OpcUaService {
                 return null;
             });
 
-            itemFuture.thenAccept(item -> item.addDataValueListener(dataValue -> {
-                Variant variant = dataValue.getValue();
-                Object value = variant.getValue();
+            itemFuture.thenAccept(item -> {
+                try {
+                    String displayName = client.getAddressSpace().getNode(nodeId).getDisplayName().getText();
+                    item.addDataValueListener(dataValue -> {
+                        Variant variant = dataValue.getValue();
+                        Object value = variant.getValue();
 
-                webSocketService.sendMessage(endpointUrl, nodeId, value.toString());
-                databaseService.saveTemperature(new Temperature(endpointUrl, nodeId.toParseableString(), (Double) value));
-            }));
+                        Instant timestamp = dataValue.getSourceTime().getJavaInstant();
+                        LocalDateTime localDateTime = LocalDateTime.ofInstant(timestamp, ZoneId.systemDefault());
+
+                        webSocketService.sendMessage(endpointUrl, nodeId, value.toString());
+
+                        databaseService.saveSensorValue(endpointUrl, (Double) value, localDateTime);
+
+                        pasterizationService.processNodeValue(endpointUrl, nodeId, value);
+                    });
+                } catch (UaException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            });
 
         } catch (Exception e) {
             e.printStackTrace();

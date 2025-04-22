@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Actuators")
-public class Actuator {
+public class Actuators {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer actuatorId;
@@ -17,8 +17,8 @@ public class Actuator {
     @OneToMany(mappedBy = "actuator", cascade = CascadeType.ALL)
     private List<ActuatorParam> params = new ArrayList<>();
 
-    public Actuator() {}
-    public Actuator(String actuatorOpcuaEndpoint, Integer actuatorStatus) {
+    public Actuators() {}
+    public Actuators(String actuatorOpcuaEndpoint, Integer actuatorStatus) {
         this.actuatorOpcuaEndpoint = actuatorOpcuaEndpoint;
         this.actuatorStatus = actuatorStatus;
     }

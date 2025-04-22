@@ -6,7 +6,7 @@ import lombok.Getter;
 @Entity
 @Table(name = "\"SensorParams\"")
 @Getter
-public class SensorParam {
+public class SensorParams {
 
     @Id
     @Column(name = "param_id")
@@ -17,11 +17,11 @@ public class SensorParam {
 
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "sensor_id")
-    private Sensor sensor;
+    private Sensors sensorId;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private OPCNodeGroup group;
+    private OPCNodeGroup groupId;
 
     @Column(name = "param_name")
     private String paramName;
@@ -32,11 +32,11 @@ public class SensorParam {
     @Column(name = "param_max_value")
     private Integer paramMaxValue;
 
-    public SensorParam() {}
+    public SensorParams() {}
 
-    public SensorParam(Sensor sensor, OPCNodeGroup group, String paramName, Integer paramMinValue, Integer paramMaxValue) {
-        this.sensor = sensor;
-        this.group = group;
+    public SensorParams(Sensors sensor, OPCNodeGroup group, String paramName, Integer paramMinValue, Integer paramMaxValue) {
+        this.sensorId = sensor;
+        this.groupId = group;
         this.paramName = paramName;
         this.paramMinValue = paramMinValue;
         this.paramMaxValue = paramMaxValue;

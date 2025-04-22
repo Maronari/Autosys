@@ -63,15 +63,15 @@ public class OpcUaConfig {
         subscribeNodes.put(endpointUrls[0],
                 Arrays.asList(
                         "ns=2;i=6"));
-        subscribeNodes.put(endpointUrls[1],
-                Arrays.asList(
-                        "ns=2;i=6"));
-        subscribeNodes.put(endpointUrls[11],
-                Arrays.asList(
-                        "ns=2;i=6"));
-        subscribeNodes.put(endpointUrls[12],
-                Arrays.asList(
-                        "ns=2;i=6"));
+        // subscribeNodes.put(endpointUrls[1],
+        //         Arrays.asList(
+        //                 "ns=2;i=6"));
+        // subscribeNodes.put(endpointUrls[11],
+        //         Arrays.asList(
+        //                 "ns=2;i=6"));
+        // subscribeNodes.put(endpointUrls[12],
+        //         Arrays.asList(
+        //                 "ns=2;i=6"));
         // subscribeNodes.put(endpointUrls[3],
         // Arrays.asList(
         // "ns=1;s=InternalTemp"));

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "UserLogs")
-public class UserLog {
+public class UserLogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -23,8 +23,8 @@ public class UserLog {
     private LocalDateTime timestamp;
     private String description;
 
-    public UserLog() {}
-    public UserLog(User user, UserAction action, LocalDateTime timestamp, String description) {
+    public UserLogs() {}
+    public UserLogs(User user, UserAction action, LocalDateTime timestamp, String description) {
         this.user = user;
         this.action = action;
         this.timestamp = timestamp;

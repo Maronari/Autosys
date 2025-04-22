@@ -15,7 +15,7 @@ public class UserAction {
     private String description;
 
     @OneToMany(mappedBy = "action", cascade = CascadeType.ALL)
-    private List<UserLog> logs = new ArrayList<>();
+    private List<UserLogs> logs = new ArrayList<>();
 
     public UserAction() {}
     public UserAction(String name, String description) {

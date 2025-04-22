@@ -4,8 +4,8 @@ package mirea.edu.autosys.repository;
 
     import org.springframework.data.jpa.repository.JpaRepository;
 
-    import mirea.edu.autosys.model.Sensor;
+    import mirea.edu.autosys.model.Sensors;
 
-public interface SensorRepository extends JpaRepository<Sensor, Integer> {
-    Optional<Sensor> findBySensorOpcuaEndpoint(String endpoint);
+public interface SensorRepository extends JpaRepository<Sensors, Integer> {
+    Optional<Sensors> findBySensorOpcuaEndpoint(String endpoint);
 }

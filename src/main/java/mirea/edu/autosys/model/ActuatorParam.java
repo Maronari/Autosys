@@ -11,8 +11,8 @@ public class ActuatorParam {
     private String nodeId;
 
     @ManyToOne
-    @JoinColumn(name = "actuator_id")
-    private Actuator actuator;
+    @JoinColumn(name = "actuatorId")
+    private Actuators actuator;
 
     private String paramName;
     private Integer paramValue;
@@ -20,7 +20,7 @@ public class ActuatorParam {
     private LocalDateTime timestamp;
 
     public ActuatorParam() {}
-    public ActuatorParam(String nodeId, Actuator actuator, String paramName, Integer paramValue, LocalDateTime timestamp) {
+    public ActuatorParam(String nodeId, Actuators actuator, String paramName, Integer paramValue, LocalDateTime timestamp) {
         this.nodeId = nodeId;
         this.actuator = actuator;
         this.paramName = paramName;

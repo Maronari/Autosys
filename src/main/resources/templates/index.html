@@ -1,51 +1,227 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
     <meta charset="UTF-8">
-    <title>OPC UA Клиенты</title>
-    <script src="JS/opcua-utils.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/dist/date-fns.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-
-    <link th:href="@{/css/index.css}" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система пастеризации вина | Панель управления</title>
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
-
 <body>
-    <h1>AutoSys</h1>
-    <!-- <input type="text" id="endpoint" placeholder="opc.tcp://server:port"> -->
-    <!-- <button onclick="connectClient()">Подключиться</button> -->
+    <div class="dashboard">
+        <header class="header">
+            <div class="logo">
+                <h1>Система пастеризации вина</h1>
+            </div>
+            <div class="system-status">
+                <div class="status-indicator online">
+                    <span class="status-dot"></span>
+                    <span class="status-text">Система активна</span>
+                </div>
+                <div class="time">
+                    <span id="current-time">00:00:00</span>
+                </div>
+            </div>
+        </header>
 
-    <div class="container">
-        <h2>Список клиентов:</h2>
-        <ul id="clientList"></ul>
-    </div>
+        <div class="dashboard-grid">
+            <div class="card temperature-card">
+                <div class="card-header">
+                    <h2>Температура</h2>
+                    <div class="card-controls">
+                        <select id="temp-time-range">
+                            <option value="1">1 час</option>
+                            <option value="6">6 часов</option>
+                            <option value="24" selected>24 часа</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+                <div class="card-footer">
+                    <div class="metric">
+                        <span class="metric-label">Текущая</span>
+                        <span class="metric-value" id="current-temp">72.5°C</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Целевая</span>
+                        <span class="metric-value" id="target-temp">20°C</span>
+                    </div>
+                </div>
+            </div>
 
-    <div class="container">
-        <div class="charts-container">
-            <div class="chart-wrapper">
-                <canvas id="Pressure_Sensor_1"></canvas>
+            <div class="card pressure-card">
+                <div class="card-header">
+                    <h2>Давление</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="pressureChart"></canvas>
+                </div>
+                <div class="card-footer">
+                    <div class="metric">
+                        <span class="metric-label">Текущее</span>
+                        <span class="metric-value" id="current-pressure">2.4 бар</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Макс.</span>
+                        <span class="metric-value" id="max-pressure">3.0 бар</span>
+                    </div>
+                </div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="Temperature_Sensor_1"></canvas>
+
+            <div class="card flow-card">
+                <div class="card-header">
+                    <h2>Расход</h2>
+                </div>
+                <div class="card-body">
+                    <canvas id="flowChart"></canvas>
+                </div>
+                <div class="card-footer">
+                    <div class="metric">
+                        <span class="metric-label">Текущий</span>
+                        <span class="metric-value" id="current-flow">120 л/ч</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Общий</span>
+                        <span class="metric-value" id="total-flow">1240 л</span>
+                    </div>
+                </div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="Pressure_Sensor_2"></canvas>
+
+            <div class="card control-card">
+                <div class="card-header">
+                    <h2>Управление</h2>
+                </div>
+                <div class="card-body control-panel">
+                    <div class="control-row">
+                        <div class="control-group">
+                            <label for="temp-setpoint">Целевая температура (°C)</label>
+                            <input type="number" id="temp-setpoint" value="75.0" min="60" max="90" step="0.5">
+                        </div>
+                        <div class="control-group">
+                            <label for="flow-setpoint">Целевой расход (л/ч)</label>
+                            <input type="number" id="flow-setpoint" value="120" min="50" max="200" step="5">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div class="control-group">
+                            <label for="process-mode">Режим работы</label>
+                            <select id="process-mode">
+                                <option value="auto">Автоматический</option>
+                                <option value="manual">Ручной</option>
+                                <option value="maintenance">Обслуживание</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="wine-type">Тип вина</label>
+                            <select id="wine-type">
+                                <option value="red">Красное</option>
+                                <option value="white">Белое</option>
+                                <option value="rose">Розовое</option>
+                                <option value="sparkling">Игристое</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="button-group">
+                        <button id="start-btn" class="btn btn-primary">Запуск</button>
+                        <button id="stop-btn" class="btn btn-danger">Остановка</button>
+                        <button id="pause-btn" class="btn btn-warning">Пауза</button>
+                    </div>
+                </div>
             </div>
-            <div class="chart-wrapper">
-                <canvas id="Temperature_Sensor_2"></canvas>
+
+            <div class="card alerts-card">
+                <div class="card-header">
+                    <h2>Оповещения</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alerts-list" id="alerts-container">
+                        <!-- Alerts will be added dynamically -->
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button id="clear-alerts" class="btn btn-sm">Очистить все</button>
+                </div>
+            </div>
+
+            <div class="card process-card">
+                <div class="card-header">
+                    <h2>Процесс пастеризации</h2>
+                </div>
+                <div class="card-body">
+                    <div class="process-timeline">
+                        <div class="timeline-step active" data-step="1">
+                            <div class="step-indicator">1</div>
+                            <div class="step-label">Подготовка</div>
+                        </div>
+                        <div class="timeline-connector"></div>
+                        <div class="timeline-step active" data-step="2">
+                            <div class="step-indicator">2</div>
+                            <div class="step-label">Нагрев</div>
+                        </div>
+                        <div class="timeline-connector"></div>
+                        <div class="timeline-step current" data-step="3">
+                            <div class="step-indicator">3</div>
+                            <div class="step-label">Пастеризация</div>
+                        </div>
+                        <div class="timeline-connector"></div>
+                        <div class="timeline-step" data-step="4">
+                            <div class="step-indicator">4</div>
+                            <div class="step-label">Охлаждение</div>
+                        </div>
+                        <div class="timeline-connector"></div>
+                        <div class="timeline-step" data-step="5">
+                            <div class="step-indicator">5</div>
+                            <div class="step-label">Завершение</div>
+                        </div>
+                    </div>
+                    <div class="process-details">
+                        <div class="process-info">
+                            <span class="info-label">Текущий этап:</span>
+                            <span class="info-value" id="current-stage">Пастеризация</span>
+                        </div>
+                        <div class="process-info">
+                            <span class="info-label">Время этапа:</span>
+                            <span class="info-value" id="stage-time">14:32</span>
+                        </div>
+                        <div class="process-info">
+                            <span class="info-label">Общее время:</span>
+                            <span class="info-value" id="total-time">1:24:32</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script th:src="@{/JS/charts.js}"></script> 
+    <script th:src="@{/JS/dashboard.js}"></script>
+    <script th:src="@{/JS/websocket.js}"></script>
+
     <script>
-        window.onload = loadClients;
+        // Проверка, что все необходимые функции доступны
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Проверка доступности функций:');
+            console.log('updateChartData:', typeof window.updateChartData === 'function');
+            console.log('updateChartTimeRange:', typeof window.updateChartTimeRange === 'function');
+            console.log('Chart:', typeof Chart !== 'undefined');
+            
+            // Проверка, что canvas элементы существуют
+            console.log('Проверка canvas элементов:');
+            console.log('temperatureChart:', document.getElementById('temperatureChart') !== null);
+            console.log('pressureChart:', document.getElementById('pressureChart') !== null);
+            console.log('flowChart:', document.getElementById('flowChart') !== null);
+            
+            // Проверка, что графики инициализированы
+            setTimeout(() => {
+                console.log('Проверка инициализации графиков:');
+                console.log('temperatureChart:', typeof temperatureChart !== 'undefined');
+                console.log('pressureChart:', typeof pressureChart !== 'undefined');
+                console.log('flowChart:', typeof flowChart !== 'undefined');
+            }, 1000);
+        });
     </script>
-
-    <script th:src="@{/JS/chart.js}"></script>
+    
 </body>
-
 </html>

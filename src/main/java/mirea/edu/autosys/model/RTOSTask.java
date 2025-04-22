@@ -10,14 +10,14 @@ import jakarta.persistence.*;
 public class RTOSTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer task_id;
-    private String task_name;
+    private Integer taskId;
+    private String taskName;
 
-    @OneToMany(mappedBy = "task_id", cascade = CascadeType.ALL)
-    private List<RTOSRuntimeTrend> rtosTrends = new ArrayList<>();
+    @OneToMany(mappedBy = "taskId", cascade = CascadeType.ALL)
+    private List<RTOSRuntimeTrends> rtosTrends = new ArrayList<>();
 
     public RTOSTask() {}
     public RTOSTask(String taskName) {
-        this.task_name = taskName;
+        this.taskName = taskName;
     }
 }

@@ -17,8 +17,8 @@ public class OPCNodeGroup {
     @Column(name = "group_name")
     private String groupName;
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<SensorParam> params = new ArrayList<>();
+    @OneToMany(mappedBy = "groupId", cascade = CascadeType.ALL)
+    private List<SensorParams> params = new ArrayList<>();
 
     public OPCNodeGroup() {}
 

@@ -21,7 +21,7 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<UserLog> logs = new ArrayList<>();
+    private List<UserLogs> logs = new ArrayList<>();
 
     public User() {}
     public User(UserType type, String name, String login, String password) {

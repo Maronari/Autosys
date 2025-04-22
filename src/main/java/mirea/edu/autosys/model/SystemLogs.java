@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "SystemLogs")
-public class SystemLog {
+public class SystemLogs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,20 +15,20 @@ public class SystemLog {
 
     @ManyToOne
     @JoinColumn(name = "sensor_id")
-    private Sensor sensor;
+    private Sensors sensorId;
 
     @ManyToOne
-    @JoinColumn(name = "log_code")
+    @JoinColumn(name = "logCode")
     private LogCode logCode;
 
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime timestamp;
     private String message;
 
-    public SystemLog() {}
+    public SystemLogs() {}
 
-    public SystemLog(Sensor sensor, LogCode logCode, LocalDateTime timestamp, String message) {
-        this.sensor = sensor;
+    public SystemLogs(Sensors sensor, LogCode logCode, LocalDateTime timestamp, String message) {
+        this.sensorId = sensor;
         this.logCode = logCode;
         this.timestamp = timestamp;
         this.message = message;

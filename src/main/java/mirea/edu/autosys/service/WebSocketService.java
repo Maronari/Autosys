@@ -50,6 +50,8 @@ public class WebSocketService extends TextWebSocketHandler {
         jsonMessage.put("endpointUrl", endpointUrl);
         jsonMessage.put("nodeId", nodeId.toParseableString());
         jsonMessage.put("value", value);
+        jsonMessage.put("messageType", "telemetry");
+
 
         String jsonString;
         try {

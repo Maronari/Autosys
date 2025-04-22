@@ -16,7 +16,7 @@ public class LogCode {
     private String logDescription;
 
     @OneToMany(mappedBy = "logCode", cascade = CascadeType.ALL)
-    private List<SystemLog> logs = new ArrayList<>();
+    private List<SystemLogs> logs = new ArrayList<>();
 
     public LogCode() {}
 

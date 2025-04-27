@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
-@Table(name = "UserAction")
+@Table(name = "user_action")
+@Getter
 public class UserAction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

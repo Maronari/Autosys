@@ -31,7 +31,7 @@ public class OpcUaConfig {
     @Autowired
     private OpcUaService opcUaService;
 
-    private static String[] endpointUrls = {
+    public static String[] endpointUrls = {
             "opc.tcp://localhost:4801/freeopcua/server",
             "opc.tcp://localhost:4802/freeopcua/server",
             "opc.tcp://localhost:4803/freeopcua/server",

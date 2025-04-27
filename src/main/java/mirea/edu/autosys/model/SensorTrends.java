@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "\"NodeTrends\"")
+@Table(name = "sensor_trends")
 @AllArgsConstructor
 @NoArgsConstructor
-public class NodeTrends {
+public class SensorTrends {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class NodeTrends {
 
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "sensor_id", nullable = false)
-    private Sensors sensorId;
+    private Sensor sensorId;
 
     @Column(name = "timestamp", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -30,7 +30,7 @@ public class NodeTrends {
     @Column(name = "node_value", nullable = false)
     private Double nodeValue;
 
-    public NodeTrends(Sensors sensor, Double nodeValue, LocalDateTime timestamp) {
+    public SensorTrends(Sensor sensor, Double nodeValue, LocalDateTime timestamp) {
         this.sensorId = sensor;
         this.timestamp = timestamp;
         this.nodeValue = nodeValue;

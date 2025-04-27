@@ -1,39 +1,41 @@
 spring:
-    application:
-      name: autosys
-    server:
-      port: 8080
-    web:
-      resources:
-        static-locations: classpath:/static/
-    thymeleaf:
-      prefix: classpath:/templates/
-      suffix: .html
-      prefixes:
-        css: classpath:/static/CSS/
-        js: classpath:/static/JS/
-      suffixes:
-        css: .css
-        js: .js
-    servlet:
-      path: /
-      session:
-        cookie:
-          same-site: None
-          secure: true
-      multipart:
-        enabled: true
-    datasource:
-      url: jdbc:postgresql://localhost:5432/autosys
-      username: autosys
-      password: 5432
-    jpa:
+  main:
+    allow-circular-references: true
+  application:
+    name: autosys
+  server:
+    port: 8080
+  web:
+    resources:
+      static-locations: classpath:/static/
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    prefixes:
+      css: classpath:/static/CSS/
+      js: classpath:/static/JS/
+    suffixes:
+      css: .css
+      js: .js
+  servlet:
+    path: /
+    session:
+      cookie:
+        same-site: None
+        secure: true
+    multipart:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/autosys
+    username: autosys
+    password: 5432
+  jpa:
+    hibernate:
+      ddl-auto: none
+      #naming:
+        #physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: false
+    properties:
       hibernate:
-        ddl-auto: none
-        naming:
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      show-sql: false
-      properties:
-        hibernate:
-          dialect: org.hibernate.dialect.PostgreSQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     

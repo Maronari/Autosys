@@ -3,9 +3,11 @@ package mirea.edu.autosys.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
-@Table(name = "UserLogs")
+@Table(name = "user_logs")
+@Getter
 public class UserLogs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

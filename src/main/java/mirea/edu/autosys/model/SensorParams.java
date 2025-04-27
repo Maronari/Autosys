@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "\"SensorParams\"")
+@Table(name = "sensor_params")
 @Getter
 public class SensorParams {
 
@@ -17,7 +17,7 @@ public class SensorParams {
 
     @ManyToOne
     @JoinColumn(name = "sensor_id", referencedColumnName = "sensor_id")
-    private Sensors sensorId;
+    private Sensor sensorId;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
@@ -34,9 +34,8 @@ public class SensorParams {
 
     public SensorParams() {}
 
-    public SensorParams(Sensors sensor, OPCNodeGroup group, String paramName, Integer paramMinValue, Integer paramMaxValue) {
+    public SensorParams(Sensor sensor, String paramName, Integer paramMinValue, Integer paramMaxValue) {
         this.sensorId = sensor;
-        this.groupId = group;
         this.paramName = paramName;
         this.paramMinValue = paramMinValue;
         this.paramMaxValue = paramMaxValue;

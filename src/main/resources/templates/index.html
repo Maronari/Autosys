@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link th:href="@{/css/styles.css}" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
+
 <body>
     <div class="dashboard">
         <header class="header">
@@ -25,66 +27,263 @@
         </header>
 
         <div class="dashboard-grid">
-            <div class="card temperature-card">
-                <div class="card-header">
-                    <h2>Температура</h2>
-                    <div class="card-controls">
-                        <select id="temp-time-range">
-                            <option value="1">1 час</option>
-                            <option value="6">6 часов</option>
-                            <option value="24" selected>24 часа</option>
-                        </select>
+            <!-- Секция пастеризации -->
+            <div class="section">
+                <h2>Секция пастеризации</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Температура</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="pasteurizationTempChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
                     </div>
                 </div>
-                <div class="card-body">
-                    <canvas id="temperatureChart"></canvas>
-                </div>
-                <div class="card-footer">
-                    <div class="metric">
-                        <span class="metric-label">Текущая</span>
-                        <span class="metric-value" id="current-temp">72.5°C</span>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Давление</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span class="metric-label">Целевая</span>
-                        <span class="metric-value" id="target-temp">20°C</span>
+                    <div class="card-body">
+                        <canvas id="pasteurizationPressureChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Расход</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="pasteurizationFlowChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Состояние клапанов</h3>
+                    <div id="pasteurizationValves">
+                        <button class="btn">Открыть клапан</button>
+                        <button class="btn">Закрыть клапан</button>
                     </div>
                 </div>
             </div>
 
-            <div class="card pressure-card">
-                <div class="card-header">
-                    <h2>Давление</h2>
-                </div>
-                <div class="card-body">
-                    <canvas id="pressureChart"></canvas>
-                </div>
-                <div class="card-footer">
-                    <div class="metric">
-                        <span class="metric-label">Текущее</span>
-                        <span class="metric-value" id="current-pressure">2.4 бар</span>
+            <!-- Секция нагрева -->
+            <div class="section">
+                <h2>Секция нагрева</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Температура</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span class="metric-label">Макс.</span>
-                        <span class="metric-value" id="max-pressure">3.0 бар</span>
+                    <div class="card-body">
+                        <canvas id="heatingTempChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Давление</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="heatingPressureChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Расход</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="heatingFlowChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Состояние клапанов</h3>
+                    <div id="pasteurizationValves">
+                        <button class="btn">Открыть клапан</button>
+                        <button class="btn">Закрыть клапан</button>
                     </div>
                 </div>
             </div>
 
-            <div class="card flow-card">
-                <div class="card-header">
-                    <h2>Расход</h2>
-                </div>
-                <div class="card-body">
-                    <canvas id="flowChart"></canvas>
-                </div>
-                <div class="card-footer">
-                    <div class="metric">
-                        <span class="metric-label">Текущий</span>
-                        <span class="metric-value" id="current-flow">120 л/ч</span>
+            <!-- Секция охлаждения -->
+            <div class="section">
+                <h2>Секция охлаждения</h2>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Температура</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="metric">
-                        <span class="metric-label">Общий</span>
-                        <span class="metric-value" id="total-flow">1240 л</span>
+                    <div class="card-body">
+                        <canvas id="coolingTempChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Давление</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="coolingPressureChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Расход</h3>
+                        <div class="card-controls">
+                            <select id="temp-time-range">
+                                <option value="1">1 час</option>
+                                <option value="6">6 часов</option>
+                                <option value="24" selected>24 часа</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="coolingFlowChart"></canvas>
+                    </div>
+                    <div class="card-footer">
+                        <div class="metric">
+                            <span class="metric-label">Текущая</span>
+                            <span class="metric-value" id="current-temp">72.5°C</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Целевая</span>
+                            <span class="metric-value" id="target-temp">20°C</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Состояние клапанов</h3>
+                    <div id="pasteurizationValves">
+                        <button class="btn">Открыть клапан</button>
+                        <button class="btn">Закрыть клапан</button>
                     </div>
                 </div>
             </div>
@@ -195,24 +394,24 @@
         </div>
     </div>
 
-    <script th:src="@{/JS/charts.js}"></script> 
+    <script th:src="@{/JS/charts.js}"></script>
     <script th:src="@{/JS/dashboard.js}"></script>
     <script th:src="@{/JS/websocket.js}"></script>
 
     <script>
         // Проверка, что все необходимые функции доступны
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             console.log('Проверка доступности функций:');
             console.log('updateChartData:', typeof window.updateChartData === 'function');
             console.log('updateChartTimeRange:', typeof window.updateChartTimeRange === 'function');
             console.log('Chart:', typeof Chart !== 'undefined');
-            
+
             // Проверка, что canvas элементы существуют
             console.log('Проверка canvas элементов:');
             console.log('temperatureChart:', document.getElementById('temperatureChart') !== null);
             console.log('pressureChart:', document.getElementById('pressureChart') !== null);
             console.log('flowChart:', document.getElementById('flowChart') !== null);
-            
+
             // Проверка, что графики инициализированы
             setTimeout(() => {
                 console.log('Проверка инициализации графиков:');
@@ -222,6 +421,7 @@
             }, 1000);
         });
     </script>
-    
+
 </body>
+
 </html>

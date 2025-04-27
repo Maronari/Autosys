@@ -8,9 +8,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "\"Sensors\"")
+@Table(name = "sensors")
 @Getter
-public class Sensors {
+public class Sensor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,20 +24,11 @@ public class Sensors {
     private Integer sensorStatus;
 
     @OneToMany(mappedBy = "sensorId", cascade = CascadeType.ALL)
-    private List<SystemLogs> logs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "sensorId", cascade = CascadeType.ALL)
     private List<SensorParams> params = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sensorId", cascade = CascadeType.ALL)
-    private List<RTOSRuntimeTrends> NodeTrends = new ArrayList<>();
+    public Sensor() {}
 
-    @OneToMany(mappedBy = "sensorId", cascade = CascadeType.ALL)
-    private List<RTOSRuntimeTrends> rtosTrends = new ArrayList<>();
-
-    public Sensors() {}
-
-    public Sensors(String sensorOpcuaEndpoint, Integer sensorStatus) {
+    public Sensor(String sensorOpcuaEndpoint, Integer sensorStatus) {
         this.sensorOpcuaEndpoint = sensorOpcuaEndpoint;
         this.sensorStatus = sensorStatus;
     }

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
-@Table(name = "\"OPCNodeGroup\"")
+@Table(name = "opc_node_group")
+@Getter
 public class OPCNodeGroup {
 
     @Id

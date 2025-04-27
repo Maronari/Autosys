@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
-@Table(name = "UserType")
-public class UserType {
+@Table(name = "user_role")
+@Getter
+public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Integer roleId;
     private String name;
     private String description;
     private Boolean privilege;
 
-    @OneToMany(mappedBy = "type", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "roleId", cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
 
-    public UserType() {}
-    public UserType(String name, String description, Boolean privilege) {
+    public UserRole() {}
+    public UserRole(String name, String description, Boolean privilege) {
         this.name = name;
         this.description = description;
         this.privilege = privilege;

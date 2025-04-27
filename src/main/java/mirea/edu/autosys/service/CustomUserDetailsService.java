@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -17,7 +17,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username);
+        User user = userRepository.findByLogin(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
@@ -25,9 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getName())
                 .password(user.getPassword())
-                // .authorities(user.getRoles().stream()
-                //         .map(role -> role.getAuthority())
-                //         .toArray(String[]::new))
+                .authorities(user.getRoleId().getName())
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)

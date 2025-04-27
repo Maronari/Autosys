@@ -4,19 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "User")
+@Table(name = "\"user\"")
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "user_id")
+    private Integer userId;
 
-    @ManyToOne
-    @JoinColumn(name = "type_id")
-    private UserType type;
+    @OneToOne
+    @JoinColumn(name = "role_id")
+    private UserRole roleId;
 
     private String name;
     private String login;
@@ -25,9 +30,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserLogs> logs = new ArrayList<>();
 
-    public User() {}
-    public User(UserType type, String name, String login, String password) {
-        this.type = type;
+    public User(UserRole roleId, String name, String login, String password) {
+        this.roleId = roleId;
         this.name = name;
         this.login = login;
         this.password = password;

@@ -10,7 +10,7 @@ const NODE_MAPPINGS = {
     "ns=2;i=6": {
         type: "temperature",
         displayId: "current-temp",
-        chartId: "temperatureChart",
+        chartId: "pasteurizationTempChart",
         formatValue: (value) => `${parseFloat(value).toFixed(1)}°C`
     },
     // Время этапа

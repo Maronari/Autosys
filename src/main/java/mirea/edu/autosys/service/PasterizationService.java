@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class PasterizationService {
     @Autowired
     private OpcUaService opcUaService;
-    @Autowired
-    private DatabaseService databaseService;
 
     public void processNodeValue(String endpointUrl, NodeId nodeId, Object value) {
         String nodeIdentifier = nodeId.getIdentifier().toString();

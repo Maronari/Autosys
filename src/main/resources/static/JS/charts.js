@@ -1,5 +1,5 @@
 // Инициализация графиков
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Загрузка исторических данных из БД
     loadHistoricalData();
 });
@@ -11,9 +11,9 @@ Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(0, 0, 0, 0.7)';
 Chart.defaults.plugins.legend.display = false;
 
 // Глобальные переменные для графиков
-let temperatureChart;
-let pressureChart;
-let flowChart;
+let pasteurizationTempChart, pasteurizationPressureChart, pasteurizationFlowChart;
+let heatingTempChart, heatingPressureChart, heatingFlowChart;
+let coolingTempChart, coolingPressureChart, coolingFlowChart;
 
 // Функция для отображения уведомлений (alerts)
 function addAlert(type, title, message) {
@@ -34,11 +34,7 @@ function addAlert(type, title, message) {
 
 // Загрузка исторических данных из БД
 function loadHistoricalData(hours = 24) {
-    // Показываем индикатор загрузки
-    showLoadingIndicators();
-    
-    // Запрос к API для получения исторических данных
-    fetch(`/api/pasteurization/historical-data?hours=${hours}`)
+    fetch(`/api/pasteurization/historical-data/pasteurization?hours=${hours}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Ошибка при загрузке данных');
@@ -47,31 +43,52 @@ function loadHistoricalData(hours = 24) {
         })
         .then(data => {
             console.log('Получены исторические данные:', data);
-            
-            // Инициализация графиков с данными из БД
-            initTemperatureChart(data.temperature);
-            initPressureChart(data.pressure);
-            initFlowChart(data.flow);
-            
-            // Обновление текущих значений
-            updateCurrentValues(data);
-            
-            // Скрываем индикатор загрузки
-            hideLoadingIndicators();
+
+            // Инициализация графиков для секции пастеризации
+            initTemperatureChart('pasteurizationTempChart', data.pasteurization.temperature);
+            initPressureChart('pasteurizationPressureChart', data.pasteurization.pressure);
+            initFlowChart('pasteurizationFlowChart', data.pasteurization.flow);
         })
         .catch(error => {
             console.error('Ошибка при загрузке исторических данных:', error);
-            
-            // В случае ошибки инициализируем графики с демо-данными
-            initTemperatureChartWithDemoData();
-            initPressureChartWithDemoData();
-            initFlowChartWithDemoData();
-            
-            // Скрываем индикатор загрузки
-            hideLoadingIndicators();
-            
-            // Показываем сообщение об ошибке
-            addAlert('error', 'Ошибка загрузки данных', 'Не удалось загрузить исторические данные. Отображаются демо-данные.');
+        });
+
+    fetch(`/api/pasteurization/historical-data/heating?hours=${hours}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Получены исторические данные:', data);
+
+            // Инициализация графиков для секции нагрева
+            initTemperatureChart('heatingTempChart', data.heating.temperature);
+            initPressureChart('heatingPressureChart', data.heating.pressure);
+            initFlowChart('heatingFlowChart', data.heating.flow);
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке исторических данных:', error);
+        });
+
+    fetch(`/api/pasteurization/historical-data/cooling?hours=${hours}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузке данных');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Получены исторические данные:', data);
+
+            // Инициализация графиков для секции охлаждения
+            initTemperatureChart('coolingTempChart', data.cooling.temperature);
+            initPressureChart('coolingPressureChart', data.cooling.pressure);
+            initFlowChart('coolingFlowChart', data.cooling.flow);
+        })
+        .catch(error => {
+            console.error('Ошибка при загрузке исторических данных:', error);
         });
 }
 
@@ -80,7 +97,7 @@ function showLoadingIndicators() {
     const chartContainers = document.querySelectorAll('.card-body canvas');
     chartContainers.forEach(container => {
         container.style.opacity = '0.5';
-        
+
         // Добавляем текст "Загрузка..." рядом с каждым графиком
         const loadingText = document.createElement('div');
         loadingText.className = 'loading-indicator';
@@ -91,7 +108,7 @@ function showLoadingIndicators() {
         loadingText.style.transform = 'translate(-50%, -50%)';
         loadingText.style.color = '#666';
         loadingText.style.fontWeight = 'bold';
-        
+
         container.parentNode.style.position = 'relative';
         container.parentNode.appendChild(loadingText);
     });
@@ -102,7 +119,7 @@ function hideLoadingIndicators() {
     const chartContainers = document.querySelectorAll('.card-body canvas');
     chartContainers.forEach(container => {
         container.style.opacity = '1';
-        
+
         // Удаляем индикаторы загрузки
         const loadingIndicator = container.parentNode.querySelector('.loading-indicator');
         if (loadingIndicator) {
@@ -116,29 +133,29 @@ function updateCurrentValues(data) {
     if (data.currentTemperature) {
         document.getElementById('current-temp').textContent = `${data.currentTemperature.toFixed(1)}°C`;
     }
-    
+
     if (data.currentPressure) {
         document.getElementById('current-pressure').textContent = `${data.currentPressure.toFixed(1)} бар`;
     }
-    
+
     if (data.currentFlow) {
         document.getElementById('current-flow').textContent = `${data.currentFlow.toFixed(0)} л/ч`;
     }
-    
+
     if (data.totalFlow) {
         document.getElementById('total-flow').textContent = `${data.totalFlow.toFixed(0)} л`;
     }
 }
 
 // Инициализация графика температуры с данными из БД
-function initTemperatureChart(data) {
-    const ctx = document.getElementById('temperatureChart').getContext('2d');
-    
+function initTemperatureChart(chartId, data) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+
     const targetTemp = 75; // Целевая температура
-    
+
     // Создаем массив целевой температуры той же длины, что и данные
     const targetTempData = Array(data.labels.length).fill(targetTemp);
-    
+
     temperatureChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -183,7 +200,7 @@ function initTemperatureChart(data) {
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
                     ticks: {
-                        callback: function(value) {
+                        callback: function (value) {
                             return value + '°C';
                         }
                     }
@@ -192,7 +209,7 @@ function initTemperatureChart(data) {
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
                         }
                     }
@@ -203,9 +220,9 @@ function initTemperatureChart(data) {
 }
 
 // Инициализация графика давления с данными из БД
-function initPressureChart(data) {
-    const ctx = document.getElementById('pressureChart').getContext('2d');
-    
+function initPressureChart(chartId, data) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+
     pressureChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -238,7 +255,7 @@ function initPressureChart(data) {
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
                     ticks: {
-                        callback: function(value) {
+                        callback: function (value) {
                             return value + ' бар';
                         }
                     }
@@ -247,7 +264,7 @@ function initPressureChart(data) {
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + ' бар';
                         }
                     }
@@ -258,9 +275,9 @@ function initPressureChart(data) {
 }
 
 // Инициализация графика расхода с данными из БД
-function initFlowChart(data) {
-    const ctx = document.getElementById('flowChart').getContext('2d');
-    
+function initFlowChart(chartId, data) {
+    const ctx = document.getElementById(chartId).getContext('2d');
+
     flowChart = new Chart(ctx, {
         type: 'line',
         data: {
@@ -293,7 +310,7 @@ function initFlowChart(data) {
                         color: 'rgba(0, 0, 0, 0.05)'
                     },
                     ticks: {
-                        callback: function(value) {
+                        callback: function (value) {
                             return value + ' л/ч';
                         }
                     }
@@ -302,97 +319,8 @@ function initFlowChart(data) {
             plugins: {
                 tooltip: {
                     callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                             return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + ' л/ч';
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-// Создание временных меток для демо-графиков
-function generateTimeLabels(hours = 24, interval = 1) {
-    const labels = [];
-    const now = new Date();
-    
-    for (let i = hours; i >= 0; i -= interval) {
-        const time = new Date(now.getTime() - i * 60 * 60 * 1000);
-        labels.push(time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-    }
-    
-    return labels;
-}
-
-// Инициализация графика температуры с демо-данными
-function initTemperatureChartWithDemoData() {
-    const ctx = document.getElementById('temperatureChart').getContext('2d');
-    
-    const timeLabels = generateTimeLabels();
-    const targetTemp = 75;
-    
-    // Генерация данных с небольшими колебаниями вокруг целевой температуры
-    const tempData = Array.from({ length: timeLabels.length }, (_, i) => {
-        const variance = Math.sin(i * 0.5) * 3; // Синусоидальные колебания
-        return targetTemp + variance + (Math.random() * 2 - 1);
-    });
-    
-    temperatureChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: timeLabels,
-            datasets: [
-                {
-                    label: 'Температура (°C)',
-                    data: tempData,
-                    borderColor: '#8c1c13',
-                    backgroundColor: 'rgba(140, 28, 19, 0.1)',
-                    borderWidth: 2,
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    tension: 0.4,
-                    fill: true
-                },
-                {
-                    label: 'Целевая температура',
-                    data: Array(timeLabels.length).fill(targetTemp),
-                    borderColor: 'rgba(40, 167, 69, 0.7)',
-                    borderWidth: 2,
-                    borderDash: [5, 5],
-                    pointRadius: 0,
-                    pointHoverRadius: 0,
-                    tension: 0
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    }
-                },
-                y: {
-                    min: targetTemp - 10,
-                    max: targetTemp + 10,
-                    grid: {
-                        color: 'rgba(0, 0, 0, 0.05)'
-                    },
-                    ticks: {
-                        callback: function(value) {
-                            return value + '°C';
-                        }
-                    }
-                }
-            },
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return context.dataset.label + ': ' + context.parsed.y.toFixed(1) + '°C';
                         }
                     }
                 }
@@ -405,49 +333,117 @@ function initTemperatureChartWithDemoData() {
 function updateChartTimeRange(chartId, hours) {
     // Показываем индикатор загрузки
     showLoadingIndicators();
-    
+
     // Запрос к API для получения исторических данных за указанный период
-    fetch(`/api/pasteurization/historical-data?hours=${hours}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ошибка при загрузке данных');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Получены исторические данные:', data);
-            
-            // Обновляем графики с новыми данными
-            if (chartId === 'temperatureChart' && temperatureChart) {
-                updateTemperatureChart(temperatureChart, data.temperature);
-            } else if (chartId === 'pressureChart' && pressureChart) {
-                updatePressureChart(pressureChart, data.pressure);
-            } else if (chartId === 'flowChart' && flowChart) {
-                updateFlowChart(flowChart, data.flow);
-            }
-            
-            // Скрываем индикатор загрузки
-            hideLoadingIndicators();
-        })
-        .catch(error => {
-            console.error('Ошибка при загрузке исторических данных:', error);
-            
-            // Скрываем индикатор загрузки
-            hideLoadingIndicators();
-            
-            // Показываем сообщение об ошибке
-            addAlert('error', 'Ошибка загрузки данных', 'Не удалось загрузить исторические данные.');
-        });
+    if (chartId === 'pasteurizationTempChart' || chartId === 'pasteurizationpressureChart' || chartId === 'pasteurizationflowChart') {
+        fetch(`/api/pasteurization/historical-data/pasteurization?hours=${hours}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Получены исторические данные:', data);
+
+                // Обновляем графики с новыми данными
+                if (chartId === 'pasteurizationTempChart' && temperatureChart) {
+                    updateTemperatureChart(temperatureChart, data.pasteurization.temperature);
+                } else if (chartId === 'pasteurizationpressureChart' && pressureChart) {
+                    updatePressureChart(pressureChart, data.pasteurization.pressure);
+                } else if (chartId === 'pasteurizationflowChart' && flowChart) {
+                    updateFlowChart(flowChart, data.pasteurization.flow);
+                }
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке исторических данных:', error);
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+
+                // Показываем сообщение об ошибке
+                addAlert('error', 'Ошибка загрузки данных', 'Не удалось загрузить исторические данные.');
+            });
+    }
+    else if (chartId === 'heatingTempChart' || chartId === 'heatingpressureChart' || chartId === 'heatingflowChart') {
+        fetch(`/api/pasteurization/historical-data/heating?hours=${hours}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Получены исторические данные:', data);
+
+                // Обновляем графики с новыми данными
+                if (chartId === 'heatingTempChart' && temperatureChart) {
+                    updateTemperatureChart(temperatureChart, data.heating.temperature);
+                } else if (chartId === 'heatingpressureChart' && pressureChart) {
+                    updatePressureChart(pressureChart, data.heating.pressure);
+                } else if (chartId === 'heatingflowChart' && flowChart) {
+                    updateFlowChart(flowChart, data.heating.flow);
+                }
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке исторических данных:', error);
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+
+                // Показываем сообщение об ошибке
+                addAlert('error', 'Ошибка загрузки данных', 'Не удалось загрузить исторические данные.');
+            });
+    }
+    if (chartId === 'coolingTempChart' || chartId === 'coolingChart' || chartId === 'coolingflowChart') {
+        fetch(`/api/pasteurization/historical-data/cooling?hours=${hours}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке данных');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Получены исторические данные:', data);
+
+                // Обновляем графики с новыми данными
+                if (chartId === 'coolingTempChart' && temperatureChart) {
+                    updateTemperatureChart(temperatureChart, data.cooling.temperature);
+                } else if (chartId === 'coolingChart' && pressureChart) {
+                    updatePressureChart(pressureChart, data.cooling.pressure);
+                } else if (chartId === 'coolingflowChart' && flowChart) {
+                    updateFlowChart(flowChart, data.cooling.flow);
+                }
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+            })
+            .catch(error => {
+                console.error('Ошибка при загрузке исторических данных:', error);
+
+                // Скрываем индикатор загрузки
+                hideLoadingIndicators();
+
+                // Показываем сообщение об ошибке
+                addAlert('error', 'Ошибка загрузки данных', 'Не удалось загрузить исторические данные.');
+            });
+    }
 }
 
 // Обновление графика температуры
 function updateTemperatureChart(chart, data) {
     const targetTemp = 75; // Целевая температура
-    
+
     chart.data.labels = data.labels;
     chart.data.datasets[0].data = data.values;
     //chart.data.datasets[1].data = Array(data.labels.length).fill(targetTemp);
-    
+
     chart.update();
 }
 
@@ -455,7 +451,7 @@ function updateTemperatureChart(chart, data) {
 function updatePressureChart(chart, data) {
     chart.data.labels = data.labels;
     chart.data.datasets[0].data = data.values;
-    
+
     chart.update();
 }
 
@@ -463,7 +459,7 @@ function updatePressureChart(chart, data) {
 function updateFlowChart(chart, data) {
     chart.data.labels = data.labels;
     chart.data.datasets[0].data = data.values;
-    
+
     chart.update();
 }
 
@@ -471,22 +467,22 @@ function updateFlowChart(chart, data) {
 function updateChartData(chartId, newValue) {
     // Получаем объект графика по ID
     const chart = window[chartId];
-    
+
     // Проверяем, существует ли график и его данные
     if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
         console.warn(`График ${chartId} не инициализирован или не имеет данных`);
         return;
     }
-    
+
     // Удаление первой точки и добавление новой в конец
     chart.data.datasets[0].data.shift();
     chart.data.datasets[0].data.push(newValue);
-    
+
     // Обновление временных меток
     const now = new Date();
     const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     chart.data.labels.shift();
     chart.data.labels.push(timeString);
-    
+
     chart.update();
 }

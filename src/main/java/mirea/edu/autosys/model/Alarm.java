@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
-@Table(name = "alarm")
+@Table(name = "alarms")
 @Getter
 public class Alarm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "alarm_id")
     private Integer id;
 
     @OneToOne

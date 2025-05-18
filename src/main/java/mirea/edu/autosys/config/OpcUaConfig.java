@@ -55,7 +55,7 @@ public class OpcUaConfig {
             "opc.tcp://localhost:4819/freeopcua/server",
             "opc.tcp://localhost:48110/freeopcua/server",
             "opc.tcp://localhost:48111/freeopcua/server",
-            // "opc.tcp://192.168.0.184:4840/"
+            // "opc.tcp://192.168.1.100:4840/"
     };
 
     public static Map<String, List<String>> subscribeNodes = new HashMap<>();
@@ -72,12 +72,12 @@ public class OpcUaConfig {
         // subscribeNodes.put(endpointUrls[12],
         //         Arrays.asList(
         //                 "ns=2;i=6"));
-        // subscribeNodes.put(endpointUrls[3],
+        // subscribeNodes.put(endpointUrls[22],
         // Arrays.asList(
-        // "ns=1;s=InternalTemp"));
-        // // "ns=1;s=FreeHeapSize",
-        // // "ns=1;s=MinimumEverFreeHeapSize",
-        // // "ns=1;s=HeapStats"));
+        // "ns=1;s=SensorTemp"));
+        // "ns=1;s=FreeHeapSize",
+        // "ns=1;s=MinimumEverFreeHeapSize",
+        // "ns=1;s=HeapStats"));
     }
     
     @Bean

@@ -149,7 +149,13 @@ public class OpcUaService {
                     String displayName = client.getAddressSpace().getNode(nodeId).getDisplayName().getText();
                     item.addDataValueListener(dataValue -> {
                         Variant variant = dataValue.getValue();
-                        Object value = variant.getValue();
+                        Object value = (Object) variant.getValue();
+
+                        if (value instanceof Number) {
+                            value = ((Number) value).doubleValue();
+                        } else {
+                            throw new RuntimeException("Unsupported value type: " + value.getClass().getName());
+                        }
 
                         Instant timestamp = dataValue.getSourceTime().getJavaInstant();
                         LocalDateTime localDateTime = LocalDateTime.ofInstant(timestamp, ZoneId.systemDefault());

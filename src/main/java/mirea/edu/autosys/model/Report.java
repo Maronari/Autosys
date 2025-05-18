@@ -14,5 +14,5 @@ public class Report {
 
     @OneToOne
     @JoinColumn(name = "alarm_id", referencedColumnName = "alarm_id", nullable = false)
-    private Integer alarmId;
+    private Alarm alarmId;
 }

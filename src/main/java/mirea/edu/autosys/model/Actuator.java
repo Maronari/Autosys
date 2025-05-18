@@ -12,8 +12,11 @@ import lombok.Getter;
 public class Actuator {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "actuator_id")
     private Integer actuatorId;
+    @Column(name = "actuator_opcua_endpoint")
     private String actuatorOpcuaEndpoint;
+    @Column(name = "actuator_status")
     private Integer actuatorStatus;
 
     @OneToMany(mappedBy = "actuator", cascade = CascadeType.ALL)

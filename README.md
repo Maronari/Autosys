@@ -14,11 +14,14 @@ Autosys is a universal automated system designed to simulate and manage industri
 - **Database Integration:** Uses PostgreSQL for persistent data storage.
 
 ## Repository Structure
-
 ```
-├── src/            # Main application source code (frontend, backend, logic)
-├── server-emu/     # OPC UA server emulator (Python-based)
-├── docker-compose.yml    # Docker Compose file to run the system
+├── src/                # Main application source code
+│   ├── main/        # Backend services and business logic
+│   └── frontend/       # Frontend web application (UI)
+├── server-emu/         # OPC UA server emulator (Python-based)
+├── scripts/            # Utility and setup scripts
+├── .env                # Environment variable definitions
+└── docker-compose.yml  # Docker Compose file to run the system
 ```
 
 ## Database Architecture
